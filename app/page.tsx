@@ -6,6 +6,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import HeroVisual from "@/components/ui/HeroVisual";
+import SemiconductorLearningEngine from "@/components/SemiconductorLearningEngine";
 import { ROADMAP_STAGES } from "@/data/roadmapData";
 import { VIRTUAL_LABS } from "@/data/labsData";
 import { CAREER_PATHS } from "@/data/careersData";
@@ -121,7 +122,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. Learning Journey Section */}
+      {/* 2. Semiconductor Learning Engine Section */}
+      <SemiconductorLearningEngine />
+
+      {/* 3. Learning Journey Section */}
       <section className="py-8 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
