@@ -357,6 +357,78 @@ export const LESSONS_DATABASE: Record<string, FullLessonData> = {
       "Applying reverse bias widens the depletion width W; forward bias narrows W and lowers the barrier."
     ],
     prevLessonId: "intrinsic-extrinsic-doping",
+    nextLessonId: "shockley-diode-equation"
+  },
+  "shockley-diode-equation": {
+    id: "shockley-diode-equation",
+    courseId: "pn-junction-diodes",
+    title: "Forward & Reverse Bias: The Shockley Equation",
+    duration: "60 min",
+    difficulty: "Intermediate",
+    tag: "DIODE DYNAMICS",
+    summary: "Derive the ideal diode equation from minority carrier injection profiles, continuity equations, and diffusion currents.",
+    learningObjectives: [
+      "Derive the minority carrier boundary conditions under forward bias: np(0) = np0 · exp(qVa / kT).",
+      "Solve the steady-state continuity equation to obtain the Shockley Ideal Diode Equation.",
+      "Analyze the reverse saturation current I0 as a function of material parameters and temperature."
+    ],
+    keyFormulas: [
+      {
+        label: "Shockley Diode Equation",
+        formula: "I = I0 · [ exp(q·Va / (n·k·T)) - 1 ]",
+        desc: "Ideal current-voltage relationship for PN junction diodes under external voltage Va."
+      },
+      {
+        label: "Reverse Saturation Current (I0)",
+        formula: "I0 = q · A · [ (Dp · pn0 / Lp) + (Dn · np0 / Ln) ]",
+        desc: "Thermally generated minority carrier leakage current when reverse biased."
+      },
+      {
+        label: "Law of the Junction",
+        formula: "pn(xn) = pn0 · exp(q·Va / kT)",
+        desc: "Excess minority carrier density injected across the lowered electrostatic barrier."
+      }
+    ],
+    sections: [
+      {
+        title: "1. The Law of the Junction & Carrier Injection",
+        content: [
+          "Under forward bias Va, the electrostatic barrier across the space-charge layer drops from Vbi to (Vbi - Va).",
+          "This lowered barrier allows majority carriers with sufficient thermal kinetic energy to surmount the junction and inject into the opposite neutral region as excess minority carriers.",
+          "At the depletion edges, the minority carrier concentration increases exponentially with applied voltage: pn(xn) = pn0 · exp(Va / Vt) and np(-xp) = np0 · exp(Va / Vt)."
+        ]
+      },
+      {
+        title: "2. Continuity & Diffusion Current Derivation",
+        content: [
+          "Once injected, excess minority carriers diffuse through the quasi-neutral regions while undergoing recombination with majority carriers.",
+          "Solving the steady-state minority carrier diffusion equations yields exponential decay profiles with characteristic diffusion lengths Lp = √(Dp · τp) and Ln = √(Dn · τn).",
+          "Summing the electron and hole diffusion currents at the depletion boundaries produces the famous Shockley diode equation: I = I0 · [exp(Va / Vt) - 1]."
+        ],
+        callout: {
+          type: "physics",
+          title: "Diode Turn-On Threshold",
+          text: "Because of the exponential exp(Va / Vt) dependency (where Vt ≈ 26 mV at room temperature), current remains negligible until Va reaches approximately 0.6V to 0.7V in silicon."
+        }
+      }
+    ],
+    checkpoint: {
+      question: "Why does forward diode current increase exponentially with applied voltage Va?",
+      options: [
+        "Because the silicon crystal melts under forward current",
+        "Because the potential barrier lowers, allowing an exponentially larger fraction of Maxwell-Boltzmann distributed carriers to inject across",
+        "Because capacitance increases to infinity",
+        "Because holes turn into electrons"
+      ],
+      correctIndex: 1,
+      explanation: "Carrier energies follow a Maxwell-Boltzmann thermal distribution. Lowering the barrier by Va allows exp(qVa/kT) more energetic carriers to surmount the junction and inject across as diffusion current."
+    },
+    keyTakeaways: [
+      "Forward bias lowers the junction barrier, enabling exponential minority carrier injection.",
+      "The Shockley equation I = I0 [exp(qVa/kT) - 1] describes the asymmetric rectification characteristic.",
+      "In silicon diodes at 300K, the noticeable conduction knee occurs between 0.6V and 0.7V."
+    ],
+    prevLessonId: "pn-electrostatics-vbi",
     nextLessonId: "mos-capacitor-inversion"
   },
   "mos-capacitor-inversion": {

@@ -19,6 +19,7 @@ import {
   Lightbulb,
   AlertCircle
 } from "lucide-react";
+import { PNJunctionVisualizer } from "@/components/visualizations/PNJunction";
 
 interface LessonViewProps {
   lessonId: string;
@@ -239,91 +240,97 @@ export default function LessonView({ lessonId, onNavigate }: LessonViewProps) {
           ))}
         </div>
 
-        {/* Interactive Physics Micro-Sandbox */}
-        <Card className="p-6 sm:p-8 mb-12 border-cyan-500/20 bg-slate-950/90">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center">
-                <Sliders className="w-4 h-4 text-cyan-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-100 text-base">
-                  Interactive Physics Sandbox: Thermal & Doping Calculator
-                </h3>
-                <p className="text-xs text-slate-400">
-                  Tune temperature and donor concentration to see live changes in thermal voltage (Vt) and intrinsic carrier density (ni).
-                </p>
-              </div>
-            </div>
-            <Badge variant="teal" size="sm">
-              LIVE SOLVER
-            </Badge>
+        {/* Interactive Physics Sandbox or Phase 2 Master Visualization */}
+        {lesson.id === "pn-electrostatics-vbi" || lesson.id === "shockley-diode-equation" || lesson.moduleId === "03" ? (
+          <div className="mb-12">
+            <PNJunctionVisualizer />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {/* Slider 1: Temperature */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-300">Temperature (T):</span>
-                <span className="text-cyan-400 font-bold">{temperature} K ({(temperature - 273.15).toFixed(1)} °C)</span>
+        ) : (
+          <Card className="p-6 sm:p-8 mb-12 border-cyan-500/20 bg-slate-950/90">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center">
+                  <Sliders className="w-4 h-4 text-cyan-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-100 text-base">
+                    Interactive Physics Sandbox: Thermal & Doping Calculator
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Tune temperature and donor concentration to see live changes in thermal voltage (Vt) and intrinsic carrier density (ni).
+                  </p>
+                </div>
               </div>
-              <input
-                type="range"
-                min="100"
-                max="500"
-                step="10"
-                value={temperature}
-                onChange={(e) => setTemperature(Number(e.target.value))}
-                className="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer h-2"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-500">
-                <span>100 K (Cryogenic)</span>
-                <span>300 K (Room)</span>
-                <span>500 K (High-Temp Fab)</span>
-              </div>
+              <Badge variant="teal" size="sm">
+                LIVE SOLVER
+              </Badge>
             </div>
 
-            {/* Slider 2: Doping */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-300">Donor Doping (Nd):</span>
-                <span className="text-sky-400 font-bold">10^{dopingExp} cm⁻³</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {/* Slider 1: Temperature */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-300">Temperature (T):</span>
+                  <span className="text-cyan-400 font-bold">{temperature} K ({(temperature - 273.15).toFixed(1)} °C)</span>
+                </div>
+                <input
+                  type="range"
+                  min="100"
+                  max="500"
+                  step="10"
+                  value={temperature}
+                  onChange={(e) => setTemperature(Number(e.target.value))}
+                  className="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer h-2"
+                />
+                <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                  <span>100 K (Cryogenic)</span>
+                  <span>300 K (Room)</span>
+                  <span>500 K (High-Temp Fab)</span>
+                </div>
               </div>
-              <input
-                type="range"
-                min="14"
-                max="20"
-                step="1"
-                value={dopingExp}
-                onChange={(e) => setDopingExp(Number(e.target.value))}
-                className="w-full accent-sky-400 bg-slate-800 rounded-lg cursor-pointer h-2"
-              />
-              <div className="flex justify-between text-[10px] font-mono text-slate-500">
-                <span>10¹⁴ (Lightly Doped)</span>
-                <span>10¹⁷ (Channel)</span>
-                <span>10²⁰ (Degenerate S/D)</span>
-              </div>
-            </div>
-          </div>
 
-          {/* Computed Output Display */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-800/80">
-            <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-              <span className="text-[10px] font-mono text-slate-400 block">Thermal Voltage (Vt)</span>
-              <span className="text-lg font-mono font-bold text-cyan-400">{vt.toFixed(2)} mV</span>
+              {/* Slider 2: Doping */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-300">Donor Doping (Nd):</span>
+                  <span className="text-sky-400 font-bold">10^{dopingExp} cm⁻³</span>
+                </div>
+                <input
+                  type="range"
+                  min="14"
+                  max="20"
+                  step="1"
+                  value={dopingExp}
+                  onChange={(e) => setDopingExp(Number(e.target.value))}
+                  className="w-full accent-sky-400 bg-slate-800 rounded-lg cursor-pointer h-2"
+                />
+                <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                  <span>10¹⁴ (Lightly Doped)</span>
+                  <span>10¹⁷ (Channel)</span>
+                  <span>10²⁰ (Degenerate S/D)</span>
+                </div>
+              </div>
             </div>
-            <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-              <span className="text-[10px] font-mono text-slate-400 block">Intrinsic Density (ni)</span>
-              <span className="text-lg font-mono font-bold text-sky-400">{ni > 1e12 ? ni.toExponential(2) : ni.toLocaleString()} cm⁻³</span>
+
+            {/* Computed Output Display */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-800/80">
+              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                <span className="text-[10px] font-mono text-slate-400 block">Thermal Voltage (Vt)</span>
+                <span className="text-lg font-mono font-bold text-cyan-400">{vt.toFixed(2)} mV</span>
+              </div>
+              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                <span className="text-[10px] font-mono text-slate-400 block">Intrinsic Density (ni)</span>
+                <span className="text-lg font-mono font-bold text-sky-400">{ni > 1e12 ? ni.toExponential(2) : ni.toLocaleString()} cm⁻³</span>
+              </div>
+              <div className="p-3 bg-slate-900 rounded-lg border border-slate-800 col-span-2 sm:col-span-1">
+                <span className="text-[10px] font-mono text-slate-400 block">Doping Regime</span>
+                <span className="text-base font-mono font-semibold text-emerald-400">
+                  {dopingExp >= 19 ? "Degenerate (Metal-like)" : dopingExp >= 16 ? "Extrinsic Active" : "Lightly Doped"}
+                </span>
+              </div>
             </div>
-            <div className="p-3 bg-slate-900 rounded-lg border border-slate-800 col-span-2 sm:col-span-1">
-              <span className="text-[10px] font-mono text-slate-400 block">Doping Regime</span>
-              <span className="text-base font-mono font-semibold text-emerald-400">
-                {dopingExp >= 19 ? "Degenerate (Metal-like)" : dopingExp >= 16 ? "Extrinsic Active" : "Lightly Doped"}
-              </span>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
 
         {/* Concept Checkpoint Quiz */}
         {lesson.checkpoint && (

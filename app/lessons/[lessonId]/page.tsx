@@ -24,6 +24,7 @@ import {
   ListOrdered,
   FileText
 } from "lucide-react";
+import { PNJunctionVisualizer } from "@/components/visualizations/PNJunction";
 
 export default function LessonViewerPage() {
   const params = useParams();
@@ -158,6 +159,15 @@ export default function LessonViewerPage() {
                   <span className="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-0.5 rounded border border-slate-800">
                     {lesson.duration}
                   </span>
+                  {(lesson.courseId === "pn-junction-diodes" || lesson.id === "pn-electrostatics-vbi") && (
+                    <a
+                      href="#pn-junction-visualizer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/60 transition-colors shadow-sm"
+                    >
+                      <Sparkles className="w-3 h-3 text-cyan-400" />
+                      <span>Interactive Visualizer Ready ↓</span>
+                    </a>
+                  )}
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
@@ -243,88 +253,94 @@ export default function LessonViewerPage() {
               ))}
             </div>
 
-            {/* "Try It Yourself" Interactive Physics Sandbox */}
-            <Card className="p-6 sm:p-8 border-cyan-500/20 bg-slate-950/90">
-              <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center">
-                    <Sliders className="w-4 h-4 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-100 text-sm sm:text-base">
-                      Interactive Parameter Sandbox: Thermal & Doping
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      Tune temperature and donor concentration to see live changes in thermal voltage (Vt) and intrinsic carrier density (ni).
-                    </p>
-                  </div>
-                </div>
-                <Badge variant="teal" size="sm">
-                  LIVE
-                </Badge>
+            {/* "Try It Yourself" Interactive Physics Sandbox or Phase 2 Master Visualization */}
+            {lesson.courseId === "pn-junction-diodes" || lesson.id === "pn-electrostatics-vbi" ? (
+              <div className="space-y-4">
+                <PNJunctionVisualizer />
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-slate-300">Temperature (T):</span>
-                    <span className="text-cyan-400 font-bold">{temperature} K</span>
+            ) : (
+              <Card className="p-6 sm:p-8 border-cyan-500/20 bg-slate-950/90">
+                <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center">
+                      <Sliders className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-slate-100 text-sm sm:text-base">
+                        Interactive Parameter Sandbox: Thermal & Doping
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        Tune temperature and donor concentration to see live changes in thermal voltage (Vt) and intrinsic carrier density (ni).
+                      </p>
+                    </div>
                   </div>
-                  <input
-                    type="range"
-                    min="100"
-                    max="500"
-                    step="10"
-                    value={temperature}
-                    onChange={(e) => setTemperature(Number(e.target.value))}
-                    className="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer h-2"
-                  />
-                  <div className="flex justify-between text-[10px] font-mono text-slate-500">
-                    <span>100 K</span>
-                    <span>300 K (Room)</span>
-                    <span>500 K</span>
-                  </div>
+                  <Badge variant="teal" size="sm">
+                    LIVE
+                  </Badge>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-slate-300">Doping (Nd):</span>
-                    <span className="text-sky-400 font-bold">10^{dopingExp} cm⁻³</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="text-slate-300">Temperature (T):</span>
+                      <span className="text-cyan-400 font-bold">{temperature} K</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="100"
+                      max="500"
+                      step="10"
+                      value={temperature}
+                      onChange={(e) => setTemperature(Number(e.target.value))}
+                      className="w-full accent-cyan-400 bg-slate-800 rounded-lg cursor-pointer h-2"
+                    />
+                    <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                      <span>100 K</span>
+                      <span>300 K (Room)</span>
+                      <span>500 K</span>
+                    </div>
                   </div>
-                  <input
-                    type="range"
-                    min="14"
-                    max="20"
-                    step="1"
-                    value={dopingExp}
-                    onChange={(e) => setDopingExp(Number(e.target.value))}
-                    className="w-full accent-sky-400 bg-slate-800 rounded-lg cursor-pointer h-2"
-                  />
-                  <div className="flex justify-between text-[10px] font-mono text-slate-500">
-                    <span>10¹⁴ (Light)</span>
-                    <span>10¹⁷ (Channel)</span>
-                    <span>10²⁰ (Degenerate)</span>
-                  </div>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-800/80">
-                <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                  <span className="text-[10px] font-mono text-slate-400 block">Thermal Voltage (Vt)</span>
-                  <span className="text-base font-mono font-bold text-cyan-400">{vt.toFixed(2)} mV</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="text-slate-300">Doping (Nd):</span>
+                      <span className="text-sky-400 font-bold">10^{dopingExp} cm⁻³</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="14"
+                      max="20"
+                      step="1"
+                      value={dopingExp}
+                      onChange={(e) => setDopingExp(Number(e.target.value))}
+                      className="w-full accent-sky-400 bg-slate-800 rounded-lg cursor-pointer h-2"
+                    />
+                    <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                      <span>10¹⁴ (Light)</span>
+                      <span>10¹⁷ (Channel)</span>
+                      <span>10²⁰ (Degenerate)</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                  <span className="text-[10px] font-mono text-slate-400 block">Intrinsic Density (ni)</span>
-                  <span className="text-base font-mono font-bold text-sky-400">{ni > 1e12 ? ni.toExponential(2) : ni.toLocaleString()} cm⁻³</span>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-800/80">
+                  <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                    <span className="text-[10px] font-mono text-slate-400 block">Thermal Voltage (Vt)</span>
+                    <span className="text-base font-mono font-bold text-cyan-400">{vt.toFixed(2)} mV</span>
+                  </div>
+                  <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
+                    <span className="text-[10px] font-mono text-slate-400 block">Intrinsic Density (ni)</span>
+                    <span className="text-base font-mono font-bold text-sky-400">{ni > 1e12 ? ni.toExponential(2) : ni.toLocaleString()} cm⁻³</span>
+                  </div>
+                  <div className="p-3 bg-slate-900 rounded-lg border border-slate-800 col-span-2 sm:col-span-1">
+                    <span className="text-[10px] font-mono text-slate-400 block">Doping Regime</span>
+                    <span className="text-xs font-mono font-semibold text-emerald-400">
+                      {dopingExp >= 19 ? "Degenerate (Metal-like)" : "Extrinsic Active"}
+                    </span>
+                  </div>
                 </div>
-                <div className="p-3 bg-slate-900 rounded-lg border border-slate-800 col-span-2 sm:col-span-1">
-                  <span className="text-[10px] font-mono text-slate-400 block">Doping Regime</span>
-                  <span className="text-xs font-mono font-semibold text-emerald-400">
-                    {dopingExp >= 19 ? "Degenerate (Metal-like)" : "Extrinsic Active"}
-                  </span>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            )}
 
             {/* Checkpoint Quiz */}
             {lesson.checkpoint && (
