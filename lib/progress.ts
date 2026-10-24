@@ -1,14 +1,16 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
+
 // ============================================================
-// Progress System — localStorage-based (no backend needed)
+// Progress System — localStorage + Supabase
 // ============================================================
 
 export interface LessonProgress {
   lessonId: string;
   courseId: string;
-  completedAt: string; // ISO string
-  quizScore?: number;  // 0–100
+  completedAt: string;
+  quizScore?: number;
   quizPassed?: boolean;
 }
 
@@ -23,6 +25,7 @@ function getStore(): ProgressStore {
   if (typeof window === "undefined") {
     return { completedLessons: {}, quizScores: {} };
   }
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { completedLessons: {}, quizScores: {} };
@@ -34,73 +37,161 @@ function getStore(): ProgressStore {
 
 function saveStore(store: ProgressStore): void {
   if (typeof window === "undefined") return;
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   } catch {
-    // Silently fail if storage is full
+    // Continue even if local storage is unavailable.
+  }
+}
+
+// Save completion to Supabase for the logged-in user.
+async function syncLessonToSupabase(
+  lessonId: string,
+  courseId: string,
+  completedAt: string
+): Promise<void> {
+  try {
+    const supabase = createClient();
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) return;
+
+    const { error } = await supabase
+      .from("lesson_progress")
+      .upsert(
+        {
+          user_id: user.id,
+          lesson_id: lessonId,
+          course_id: courseId,
+          completed_at: completedAt,
+        },
+        { onConflict: "user_id,lesson_id" }
+      );
+
+    if (error) {
+      console.error("Could not sync lesson progress:", error.message);
+    }
+  } catch (error) {
+    console.error("Lesson progress sync failed:", error);
+  }
+}
+
+// Download saved completions from Supabase and merge them locally.
+export async function syncProgressFromSupabase(): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  try {
+    const supabase = createClient();
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) return;
+
+    const { data, error } = await supabase
+      .from("lesson_progress")
+      .select("lesson_id, course_id, completed_at")
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Could not load lesson progress:", error.message);
+      return;
+    }
+
+    const store = getStore();
+
+    for (const row of data ?? []) {
+      store.completedLessons[row.lesson_id] = {
+        lessonId: row.lesson_id,
+        courseId: row.course_id || "",
+        completedAt: row.completed_at,
+      };
+    }
+
+    saveStore(store);
+  } catch (error) {
+    console.error("Loading lesson progress failed:", error);
   }
 }
 
 // ---- Public API ----
 
-/** Mark a lesson as completed (persists across page refreshes). */
-export function markLessonComplete(lessonId: string, courseId: string, quizScore?: number): void {
+export function markLessonComplete(
+  lessonId: string,
+  courseId: string,
+  quizScore?: number
+): void {
   const store = getStore();
+  const completedAt = new Date().toISOString();
+
   store.completedLessons[lessonId] = {
     lessonId,
     courseId,
-    completedAt: new Date().toISOString(),
+    completedAt,
     quizScore,
     quizPassed: quizScore !== undefined ? quizScore >= 70 : undefined,
   };
+
   if (quizScore !== undefined) {
     store.quizScores[lessonId] = quizScore;
   }
+
   saveStore(store);
+
+  // Sync in the background without blocking the UI.
+  void syncLessonToSupabase(lessonId, courseId, completedAt);
 }
 
-/** Check if a specific lesson is completed. */
 export function isLessonComplete(lessonId: string): boolean {
-  const store = getStore();
-  return !!store.completedLessons[lessonId];
+  return !!getStore().completedLessons[lessonId];
 }
 
-/** Get all completed lesson IDs. */
 export function getCompletedLessonIds(): string[] {
-  const store = getStore();
-  return Object.keys(store.completedLessons);
+  return Object.keys(getStore().completedLessons);
 }
 
-/** Get progress for a specific course (returns 0–100 percentage). */
-export function getCourseProgress(courseId: string, totalLessons: number): number {
-  if (totalLessons === 0) return 0;
-  const store = getStore();
-  const completed = Object.values(store.completedLessons).filter(
-    (l) => l.courseId === courseId
+export function getCompletedCountForCourse(courseId: string): number {
+  return Object.values(getStore().completedLessons).filter(
+    (lesson) => lesson.courseId === courseId
   ).length;
+}
+
+export function getCourseProgress(
+  courseId: string,
+  totalLessons: number
+): number {
+  if (totalLessons === 0) return 0;
+
+  const completed = getCompletedCountForCourse(courseId);
+
   return Math.round((completed / totalLessons) * 100);
 }
 
-/** Get overall platform progress across all lessons. */
 export function getOverallProgress(totalLessonsAcrossPlatform: number): number {
   if (totalLessonsAcrossPlatform === 0) return 0;
-  const store = getStore();
-  const completed = Object.keys(store.completedLessons).length;
-  return Math.round((completed / totalLessonsAcrossPlatform) * 100);
+
+  return Math.round(
+    (Object.keys(getStore().completedLessons).length /
+      totalLessonsAcrossPlatform) *
+    100
+  );
 }
 
-/** Get the quiz score for a lesson (undefined if not taken). */
 export function getLessonQuizScore(lessonId: string): number | undefined {
-  const store = getStore();
-  return store.completedLessons[lessonId]?.quizScore;
+  return getStore().completedLessons[lessonId]?.quizScore;
 }
 
-/** Get full progress store for display purposes. */
 export function getFullProgressStore(): ProgressStore {
   return getStore();
 }
 
-/** Reset all progress (for testing). */
 export function resetProgress(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STORAGE_KEY);

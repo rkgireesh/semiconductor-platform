@@ -4,9 +4,10 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { getFullProgressStore } from "@/lib/progress";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import {
+  getFullProgressStore,
+  syncProgressFromSupabase,
+} from "@/lib/progress";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -51,6 +52,17 @@ export default function ProfilePage() {
     quizScoreCount: 0,
   });
 
+  const refreshProgressStats = async () => {
+    await syncProgressFromSupabase();
+
+    const store = getFullProgressStore();
+
+    setProgressStats({
+      completedCount: Object.keys(store.completedLessons || {}).length,
+      quizScoreCount: Object.keys(store.quizScores || {}).length,
+    });
+  };
+
   useEffect(() => {
     async function loadData() {
       const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
@@ -84,16 +96,27 @@ export default function ProfilePage() {
       }
 
       // Load local learning progress stats
-      const store = getFullProgressStore();
-      const completedCount = Object.keys(store.completedLessons || {}).length;
-      const quizScoreCount = Object.keys(store.quizScores || {}).length;
-      setProgressStats({ completedCount, quizScoreCount });
+      refreshProgressStats();
 
       setLoading(false);
     }
 
     loadData();
   }, [router, supabase]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        refreshProgressStats();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,19 +160,16 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#070B14] flex flex-col justify-between">
-        <Navbar />
         <div className="flex flex-col items-center justify-center my-auto py-20 text-cyan-400">
           <Sparkles className="w-10 h-10 animate-spin mb-4" />
           <p className="text-sm font-mono text-slate-400">Decrypting user profile & telemetry...</p>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#070B14] text-slate-100 flex flex-col justify-between">
-      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-grow">
         {/* Banner Section */}
@@ -438,7 +458,6 @@ export default function ProfilePage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

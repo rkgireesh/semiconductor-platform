@@ -81,7 +81,7 @@ export default function ModuleView({ moduleId, onNavigate }: ModuleViewProps) {
               {moduleData.title}
             </h1>
             <p className="text-cyan-300 font-mono text-sm sm:text-base">
-              // {moduleData.subtitle}
+              {"//"} {moduleData.subtitle}
             </p>
 
             <p className="text-slate-300 text-base md:text-lg leading-relaxed pt-2">

@@ -97,16 +97,16 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {mainLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-all ${
                     isActive
-                      ? "text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 shadow-sm shadow-cyan-500/10"
+                      ? "text-cyan-300 bg-cyan-950/60 border border-cyan-500/40 shadow-sm shadow-cyan-500/20"
                       : "text-slate-300 hover:text-cyan-300 hover:bg-slate-800/40"
                   }`}
                 >
@@ -119,9 +119,9 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                   isMoreActive || moreDropdownOpen
-                    ? "text-cyan-300 bg-cyan-950/60 border border-cyan-500/30"
+                    ? "text-cyan-300 bg-cyan-950/60 border border-cyan-500/40"
                     : "text-slate-300 hover:text-cyan-300 hover:bg-slate-800/40"
                 }`}
               >
@@ -162,12 +162,12 @@ export default function Navbar() {
           </nav>
 
           {/* Actions: Profile & Start Learning CTA */}
-          <div className="hidden xl:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2.5 xl:gap-3">
             <Link
               href="/profile"
               className={`p-2.5 rounded-xl transition-all border ${
                 pathname === "/profile"
-                  ? "bg-cyan-950/60 border-cyan-500/40 text-cyan-300"
+                  ? "bg-cyan-950/60 border-cyan-500/40 text-cyan-300 shadow-sm shadow-cyan-500/10"
                   : "bg-slate-900/60 border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/30"
               }`}
               title="User Portfolio & Profile"
@@ -185,7 +185,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex xl:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-2">
             <Link
               href="/profile"
               className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400"
@@ -211,7 +211,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-[#0A0F1D]/98 backdrop-blur-2xl border-b border-slate-800 px-4 pt-3 pb-8 space-y-4 max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="lg:hidden bg-[#0A0F1D]/98 backdrop-blur-2xl border-b border-slate-800 px-4 pt-3 pb-8 space-y-4 max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="space-y-1">
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider px-3 block mb-1">
               Core Navigation

@@ -66,7 +66,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-slate-400 text-sm max-w-sm leading-relaxed">
-              "From atoms to advanced chips." Production-grade interactive engineering education bridging quantum physics, nanoelectronics, VLSI design, and global semiconductor career excellence.
+              &ldquo;From atoms to advanced chips.&rdquo; Production-grade interactive engineering education bridging quantum physics, nanoelectronics, VLSI design, and global semiconductor career excellence.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono text-slate-400">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">

@@ -81,7 +81,7 @@ export default function RoadmapPage() {
                   <div className="space-y-1.5 flex-1">
                     <div className="flex flex-wrap items-center gap-2.5">
                       <span className="text-xs font-mono text-cyan-400 font-semibold uppercase">
-                        STAGE {stage.num} // {stage.category}
+                        STAGE {stage.num} • {stage.category}
                       </span>
                       <Badge variant={stage.diffVariant} size="sm">
                         {stage.difficulty}

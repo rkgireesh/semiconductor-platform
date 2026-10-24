@@ -48,12 +48,12 @@ export default function HomePage() {
 
   return (
     <div className="w-full flex flex-col space-y-24 pb-20">
-      
+
       {/* 1. Hero Section */}
       <section className="relative pt-8 pb-12 md:pt-16 md:pb-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            
+
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center justify-center lg:justify-start">

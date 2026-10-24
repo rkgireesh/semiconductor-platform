@@ -119,7 +119,7 @@ export default function DeviceExplorerView({ onNavigate }: DeviceExplorerViewPro
                 <div className="flex items-center gap-2">
                   <Cpu className="w-5 h-5 text-cyan-400" />
                   <h3 className="font-bold text-slate-100 text-lg">
-                    {device.name} // Cross-Section Schematic
+                    {device.name} — Cross-Section Schematic
                   </h3>
                 </div>
                 <Badge variant="teal" size="sm">

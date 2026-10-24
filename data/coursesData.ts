@@ -2,7 +2,7 @@ export interface CourseLessonRef {
   id: string;
   title: string;
   duration: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  difficulty: "Beginner" | "Intermediate" | "Advanced" | "Professional";
   topics: string[];
 }
 
@@ -31,7 +31,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Beginner",
     duration: "10.5 Hours",
     lessonCount: 6,
-    progressPct: 65,
+    progressPct: 0,
     description: "From Bohr atomic orbits and diamond cubic crystal lattices to energy bandgaps, intrinsic carrier generation, Fermi-Dirac statistics, and drift-diffusion current transport.",
     instructor: "Dr. Chen, Semiconductor Physics Chair",
     badgeVariant: "teal",
@@ -95,7 +95,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Intermediate",
     duration: "8.0 Hours",
     lessonCount: 4,
-    progressPct: 40,
+    progressPct: 0,
     description: "Equilibrium space-charge electrostatics, built-in barrier potential Vbi, Shockley ideal diode equation under bias, depletion vs diffusion capacitance, and Zener/avalanche breakdown.",
     instructor: "Dr. Al-Mansoor, Microelectronics Lab",
     badgeVariant: "sky",
@@ -145,7 +145,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Intermediate",
     duration: "9.0 Hours",
     lessonCount: 4,
-    progressPct: 20,
+    progressPct: 0,
     description: "Double-junction physics in NPN/PNP transistors, minority carrier gradient in the thin base, base-width modulation (Early effect), and high-frequency hybrid-pi equivalent circuits.",
     instructor: "Prof. Elena Rostova, Analog Circuit Design Group",
     badgeVariant: "sky",
@@ -195,7 +195,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Advanced",
     duration: "11.0 Hours",
     lessonCount: 5,
-    progressPct: 80,
+    progressPct: 0,
     description: "MOS capacitor electrostatics across accumulation, depletion, and inversion; long-channel square-law equations; velocity saturation; Drain-Induced Barrier Lowering (DIBL); and 3D FinFET architectures.",
     instructor: "Dr. Chen, Semiconductor Physics Chair",
     badgeVariant: "blue",
@@ -252,7 +252,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Intermediate",
     duration: "10.0 Hours",
     lessonCount: 4,
-    progressPct: 15,
+    progressPct: 0,
     description: "CMOS inverter voltage transfer curve (VTC), noise margin optimization, propagation delay modeling (Elmore delay), method of Logical Effort, and combinational logic path sizing.",
     instructor: "David Vance, Principal Digital Architect",
     badgeVariant: "blue",
@@ -302,7 +302,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Professional",
     duration: "14.0 Hours",
     lessonCount: 5,
-    progressPct: 30,
+    progressPct: 0,
     description: "End-to-end ASIC design flow: synthesizable Verilog HDL, static timing analysis (STA), setup/hold constraints, floorplanning, placement, clock tree synthesis (CTS), and tape-out verification.",
     instructor: "VLSI Tape-out Team & Foundry Partners",
     badgeVariant: "purple",
@@ -359,7 +359,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Intermediate",
     duration: "9.5 Hours",
     lessonCount: 4,
-    progressPct: 10,
+    progressPct: 0,
     description: "Czochralski silicon ingot growth, High-NA EUV lithography, plasma etch, atomic layer deposition (ALD), ion implantation, and chemical-mechanical planarization (CMP).",
     instructor: "Cleanroom Operations & Yield Engineering Group",
     badgeVariant: "amber",
@@ -409,7 +409,7 @@ export const COURSES_DATA: CourseData[] = [
     level: "Professional",
     duration: "12.5 Hours",
     lessonCount: 5,
-    progressPct: 5,
+    progressPct: 0,
     description: "Sub-2nm physics: Gate-All-Around (GAAFET) horizontal nanosheets, Backside Power Delivery (BSPDN), GaN/SiC wide bandgap power devices, and 2.5D/3D chiplet packaging (CoWoS/3D-IC).",
     instructor: "Nanoelectronics Research Alliance",
     badgeVariant: "purple",
@@ -456,6 +456,156 @@ export const COURSES_DATA: CourseData[] = [
         duration: "60 min",
         difficulty: "Advanced",
         topics: ["4 Kelvin Transistor Operation", "Carrier Freeze-out", "Low-Noise Quantum Readout"]
+      }
+    ]
+  },
+  {
+    id: "power-semiconductors",
+    title: "Power Semiconductors: SiC & GaN Power Devices",
+    code: "POWER-301",
+    level: "Advanced",
+    duration: "11.0 Hours",
+    lessonCount: 4,
+    progressPct: 0,
+    description: "Wide bandgap power switches: 4H-SiC power MOSFETs, AlGaN/GaN 2DEG HEMTs, high-voltage isolated gate drivers with >150 kV/μs CMTI, and advanced DBC/AMB power modules.",
+    instructor: "Power Electronics Consortium & EV Systems Lab",
+    badgeVariant: "amber",
+    topics: ["4H-SiC MOSFETs", "AlGaN/GaN HEMTs", "Baliga FOM", "CMTI >150 kV/μs", "Silver Sintering"],
+    prerequisites: ["SEMI-102 (PN Junctions)", "SEMI-202 (MOSFETs)"],
+    skillsGained: [
+      "SiC unipolar drift layer thickness and doping calculations",
+      "AlGaN/GaN 2DEG sheet carrier density derivations",
+      "Parasitic Miller clamp and common source inductance mitigation",
+      "Power module thermal RC network modeling"
+    ],
+    lessons: [
+      {
+        id: "sic-power-mosfets-design",
+        title: "Silicon Carbide (SiC) Power MOSFET Physics & Planar vs Trench Architecture",
+        duration: "45 min",
+        difficulty: "Advanced",
+        topics: ["Baliga Figure of Merit", "Planar DMOS vs UMOS", "Basal Plane Dislocations"]
+      },
+      {
+        id: "gan-hemt-switching-circuits",
+        title: "Gallium Nitride (GaN) HEMTs: 2DEG Physics, E-Mode Gates & MHz Switching",
+        duration: "40 min",
+        difficulty: "Advanced",
+        topics: ["Spontaneous & Piezoelectric Polarization", "p-GaN Gate Normally-Off", "Dynamic RDS(on)"]
+      },
+      {
+        id: "gate-driver-isolation-cmti",
+        title: "High-Voltage Isolated Gate Drivers & Common-Mode Transient Immunity (CMTI)",
+        duration: "40 min",
+        difficulty: "Advanced",
+        topics: ["Galvanic Isolation", "CMTI >150 V/ns", "Kelvin Source & Miller Clamp"]
+      },
+      {
+        id: "thermal-management-power-modules",
+        title: "Power Module Packaging, Direct Bond Copper (DBC) & Thermal Management",
+        duration: "40 min",
+        difficulty: "Advanced",
+        topics: ["DBC vs AMB Substrates", "Silver Sintering vs Solder", "Transient Zth Networks"]
+      }
+    ]
+  },
+  {
+    id: "memory-and-packaging",
+    title: "Memory Technologies & Advanced 3D Packaging",
+    code: "MEM-301",
+    level: "Advanced",
+    duration: "12.0 Hours",
+    lessonCount: 4,
+    progressPct: 0,
+    description: "SRAM 6T stability & Static Noise Margin, DRAM 1T1C deep trench capacitors with refresh timings, 3D NAND charge trap vertical strings (>200 layers), and emerging STT-MRAM & Cu-Cu hybrid bonding.",
+    instructor: "Memory Systems & Advanced Packaging Group",
+    badgeVariant: "purple",
+    topics: ["6T SRAM SNM", "1T1C DRAM Refresh", "3D NAND Charge Trap", "STT-MRAM MTJ", "Cu-Cu Hybrid Bonding"],
+    prerequisites: ["SEMI-202 (MOSFETs)", "VLSI-201 (CMOS Digital)"],
+    skillsGained: [
+      "SRAM butterfly curve static noise margin analysis",
+      "DRAM charge sharing differential bitline sense derivations",
+      "3D NAND wordline staircase high-aspect-ratio scaling",
+      "Die-to-die direct Cu-Cu hybrid bonding integration"
+    ],
+    lessons: [
+      {
+        id: "sram-dram-architectures-refresh",
+        title: "SRAM 6T Bitcell Stability & DRAM 1T1C Deep Capacitor Refresh Dynamics",
+        duration: "45 min",
+        difficulty: "Intermediate",
+        topics: ["SRAM Cell Ratio & Pull-Up Ratio", "DRAM Charge Sharing", "tREFI & tRFC Refresh Cycles"]
+      },
+      {
+        id: "3d-nand-flash-string-stacking",
+        title: "3D NAND Flash: Charge Trap Physics, String Stacking & TLC/QLC Scaling",
+        duration: "45 min",
+        difficulty: "Advanced",
+        topics: ["Charge Trap Flash (CTF)", "Macaroni Channels 70:1 RIE", "QLC 16-State Distributions"]
+      },
+      {
+        id: "emerging-mram-rram-crossbars",
+        title: "Emerging Non-Volatile Memory: STT-MRAM, OxRAM & Neuromorphic Crossbars",
+        duration: "40 min",
+        difficulty: "Advanced",
+        topics: ["Magnetic Tunnel Junctions (MTJ)", "Oxygen Vacancy Filaments", "Analog In-Memory Computing"]
+      },
+      {
+        id: "chiplets-interposers-hybrid-bonding",
+        title: "Advanced 2.5D/3D Packaging: Silicon Interposers, TSVs & Cu-Cu Hybrid Bonding",
+        duration: "45 min",
+        difficulty: "Advanced",
+        topics: ["CoWoS & EMIB Bridges", "Through-Silicon Vias (TSVs)", "Direct Cu-Cu SoIC Bonding"]
+      }
+    ]
+  },
+  {
+    id: "device-modelling-testing",
+    title: "Semiconductor Device Modelling, Testing & Reliability",
+    code: "REL-301",
+    level: "Professional",
+    duration: "12.0 Hours",
+    lessonCount: 4,
+    progressPct: 0,
+    description: "TCAD Poisson-drift-diffusion solvers with quantum corrections, wafer sort probe testing, scan chain DFT & ATPG fault models, transistor aging (BTI/HCI/TDDB), and FIB-TEM failure analysis.",
+    instructor: "Device Physics & Quality Reliability Organization",
+    badgeVariant: "blue",
+    topics: ["TCAD PDE Solvers", "Scan Chain DFT", "ATPG Fault Coverage", "BTI & Electromigration", "Dual-Beam FIB-TEM"],
+    prerequisites: ["SEMI-101", "SEMI-202 (MOSFETs)", "VLSI-301"],
+    skillsGained: [
+      "Coupled Poisson-continuity Newton-Raphson simulation",
+      "Scan chain insertion and stuck-at/transition fault grading",
+      "Transistor lifetime projection using Black's and reaction-diffusion laws",
+      "Physical failure analysis fault isolation workflows"
+    ],
+    lessons: [
+      {
+        id: "tcad-device-physics-solvers",
+        title: "TCAD Device Simulation: Poisson-Drift-Diffusion & Quantum Corrections",
+        duration: "45 min",
+        difficulty: "Advanced",
+        topics: ["Coupled PDEs & Newton-Raphson", "Schrödinger-Poisson Quantum Confinement", "Mesh Discretization"]
+      },
+      {
+        id: "wafer-sort-dft-atpg-testing",
+        title: "Wafer Sort, Design for Testability (DFT) & Automated Test Pattern Generation (ATPG)",
+        duration: "45 min",
+        difficulty: "Intermediate",
+        topics: ["Automated Test Equipment (ATE)", "Scan Flip-Flops & Chains", "Stuck-At & Transition ATPG"]
+      },
+      {
+        id: "transistor-reliability-aging-bti",
+        title: "Transistor Aging & Reliability: BTI, HCI, TDDB & Electromigration",
+        duration: "45 min",
+        difficulty: "Advanced",
+        topics: ["NBTI & PBTI Reaction-Diffusion", "Hot Carrier Injection & TDDB", "Black's Equation Electromigration"]
+      },
+      {
+        id: "failure-analysis-fault-isolation",
+        title: "Physical Failure Analysis: Dual-Beam FIB, TEM, EMMI & Nanoprobing",
+        duration: "40 min",
+        difficulty: "Advanced",
+        topics: ["PEM & EMMI Infrared Hotspots", "Dual-Beam FIB Cross-Sections", "Atomic-Scale TEM Lamellas"]
       }
     ]
   }

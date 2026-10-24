@@ -26,14 +26,18 @@ export default function PNJunctionVisualizer({
   const [learnStepIndex, setLearnStepIndex] = useState<number>(0);
   const [biasMode, setBiasMode] = useState<BiasMode>("equilibrium");
   const [voltageV, setVoltageV] = useState<number>(0.0);
-  const [reducedMotion, setReducedMotion] = useState<boolean>(false);
+  const [reducedMotion, setReducedMotion] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+    return false;
+  });
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   // Detect user prefers-reduced-motion media query
   useEffect(() => {
     if (typeof window !== "undefined") {
       const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-      setReducedMotion(mediaQuery.matches);
       const listener = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
       mediaQuery.addEventListener("change", listener);
       return () => mediaQuery.removeEventListener("change", listener);
